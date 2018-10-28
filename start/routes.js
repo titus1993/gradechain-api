@@ -22,4 +22,8 @@ Route.group(() => {
 
   Route.get('/Course/:id', 'CourseController.GetCourse')
   Route.post('/Course', 'CourseController.SetCourse')
+
+  Route.post('/Grade', 'GradeController.SetGrade')
+  Route.get('/Grade/Last', 'GradeController.GetLastGrades')
+  Route.get('/Grade/all/:studentId', 'GradeController.GetGradesById')
 }).prefix('/api')
