@@ -17,3 +17,8 @@
 const Route = use('Route')
 
 Route.on('/').render('welcome')
+
+Route.group(() => {
+  Route.post('/saludo', 'PruebaController.Prueba');
+  Route.post('/GetStudent', 'StudentController.GetStudent');
+}).prefix('/api');
