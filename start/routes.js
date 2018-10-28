@@ -16,9 +16,10 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.on('/').render('welcome')
-
 Route.group(() => {
-  Route.post('/saludo', 'PruebaController.Prueba');
-  Route.post('/GetStudent', 'StudentController.GetStudent');
-}).prefix('/api');
+  Route.get('/Student/:id', 'StudentController.GetStudent')
+  Route.post('/Student','StudentController.SetStudent')
+
+  Route.get('/Course/:id', 'CourseController.GetCourse')
+  Route.post('/Course', 'CourseController.SetCourse')
+}).prefix('/api')
