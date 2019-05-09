@@ -1,91 +1,158 @@
 pragma solidity ^0.4.25;
 
+import "./Ownable.sol";
+
 /**
- * @title Ownable
- * @dev The Ownable contract has an owner address, and provides basic authorization control
- * functions, this simplifies the implementation of "user permissions".
- */
-contract GradeChain {
-  address private _owner;
+* @title GradeChain
+* @dev The GradeChain contract can manage data .
+*/
+contract GradeChain is Ownable{
+  //Structs
+  struct Course{
+    uint blockNumber;
+    uint id;
+    string name;
+  }
 
   struct Student {
-    string id;
+    uint blockNumber;
+    uint id;
     string firstName;
     string lastName;
     string career;
     string birthDate;
+
+    uint[] CoursesList;
+    mapping (uint => uint) Grades;
+    mapping (uint => uint) BlockNumbers;
   }
 
-  struct Course{
-    string id;
-    string name;
+  //Variables
+  Student[] private StudentsList;
+
+  mapping (uint => Student) private Students;
+
+  Course[] private CoursesList;
+
+  //Mappings
+  mapping (uint => Course) private Courses;
+
+
+  //Events
+  event AddCourse(uint blockNumber, uint id, string name);
+
+  event AddStudent(uint blockNumber, uint id, string firstName, string lastName, string career, string birthDate);
+
+  event AddGrade(uint blockNumber, uint studentId, uint courseId, uint grade);
+
+  //Functions
+  function addCourse(uint id, string name) public onlyOwner {
+    uint blockNumber = block.number;
+
+    Course memory course = Courses[id];
+
+    require(course.id == 0 && bytes(course.name).length == 0);
+
+    Course memory newCourse = Course(blockNumber, id, name);
+
+    Courses[id] = newCourse;
+    CoursesList.push(newCourse);
+
+    emit AddCourse(blockNumber, id, name);
   }
 
 
+  function addStudent(uint id, string firstName, string lastName, string career, string birthDate) public onlyOwner {
+    uint blockNumber = block.number;
 
-  event OwnershipTransferred(
-    address indexed previousOwner,
-    address indexed newOwner
-  );
+    Student memory student = Students[id];
 
+    require(student.id == 0 && bytes(student.firstName).length == 0);
 
-  /**
-   * @dev The Ownable constructor sets the original `owner` of the contract to the sender
-   * account.
-   */
-  constructor() internal {
-    _owner = msg.sender;
-    emit OwnershipTransferred(address(0), _owner);
+    Student memory newStudent = Student(blockNumber, id, firstName, lastName, career, birthDate, new uint[](0));
+
+    Students[id] = newStudent;
+    StudentsList.push(newStudent);
+
+    emit AddStudent(blockNumber, id, firstName, lastName, career, birthDate);
   }
 
-  /**
-   * @return the address of the owner.
-   */
-  function owner() public view returns(address) {
-    return _owner;
+  function addGrade(uint studentId, uint courseId, uint courseGrade) public onlyOwner {
+    Student storage student = Students[studentId];
+
+    require(student.id != 0 && bytes(student.firstName).length != 0);
+
+    Course memory course = Courses[courseId];
+
+    require(course.id != 0 && bytes(course.name).length != 0);
+
+    uint grade = student.Grades[courseId];
+
+    require(grade == 0);
+
+    student.CoursesList.push(courseId);
+
+    student.Grades[courseId] = courseGrade;
+    student.BlockNumbers[courseId] = block.number;
+
+    emit AddGrade(block.number, studentId, courseId, courseGrade);
   }
 
-  /**
-   * @dev Throws if called by any account other than the owner.
-   */
-  modifier onlyOwner() {
-    require(isOwner());
-    _;
+  function getStudentById(uint id) public view returns (uint, uint, string, string, string, string) {
+    Student memory student = Students[id];
+    return(student.blockNumber, student.id, student.firstName, student.lastName, student.career, student.birthDate);
   }
 
-  /**
-   * @return true if `msg.sender` is the owner of the contract.
-   */
-  function isOwner() public view returns(bool) {
-    return msg.sender == _owner;
+  function getStudentByPosition(uint position) public view returns (uint, uint, string, string, string, string) {
+    uint size = StudentsList.length;
+
+    require(position >= 0 && position < size);
+
+    Student memory student = StudentsList[position];
+
+    return(student.blockNumber, student.id, student.firstName, student.lastName, student.career, student.birthDate);
   }
 
-  /**
-   * @dev Allows the current owner to relinquish control of the contract.
-   * @notice Renouncing to ownership will leave the contract without an owner.
-   * It will not be possible to call the functions with the `onlyOwner`
-   * modifier anymore.
-   */
-  function renounceOwnership() public onlyOwner {
-    emit OwnershipTransferred(_owner, address(0));
-    _owner = address(0);
+  function getCourseById(uint id) public view returns (uint, uint, string) {
+    Course memory course = Courses[id];
+    return(course.blockNumber, course.id, course.name);
   }
 
-  /**
-   * @dev Allows the current owner to transfer control of the contract to a newOwner.
-   * @param newOwner The address to transfer ownership to.
-   */
-  function transferOwnership(address newOwner) public onlyOwner {
-    _transferOwnership(newOwner);
+  function getCourseByPosition(uint position) public view returns (uint, uint, string) {
+    uint size = CoursesList.length;
+
+    require(position >= 0 && position < size);
+
+    Course memory course = CoursesList[position];
+
+    return(course.blockNumber, course.id, course.name);
   }
 
-  /**
-   * @dev Transfers control of the contract to a newOwner.
-   * @param newOwner The address to transfer ownership to.
-   */
-  function _transferOwnership(address newOwner) internal {
-    require(newOwner != address(0));
-    emit OwnershipTransferred(_owner, newOwner);
-    _owner = newOwner;
+  function getStudentGradesById(uint studentId) public view returns (uint[] blockNumbers, uint[] course, uint[] grade) {
+    Student storage student = Students[studentId];
+
+    require(student.id != 0);
+
+    uint size = student.CoursesList.length;
+
+    blockNumbers = new uint[](size);
+    course = new uint[](size);
+    grade = new uint[](size);
+
+    for(uint i = 0; i < size; i++){
+      uint courseId = student.CoursesList[i];
+
+      blockNumbers[i] = student.BlockNumbers[courseId];
+      course[i] = courseId;
+      grade[i] = student.Grades[courseId];
+    }
+  }
+
+  function getStudentsLength() public view returns (uint) {
+    return StudentsList.length;
+  }
+
+  function getCoursesLength() public view returns (uint) {
+    return CoursesList.length;
   }
 }

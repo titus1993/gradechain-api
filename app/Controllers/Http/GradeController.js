@@ -1,21 +1,78 @@
 'use strict'
+var GradeChainJSON = require("../../Contracts/build/contracts/GradeChain.json");
+const Env = use('Env')
+const Web3 = require('web3')
+const web3 = new Web3(new Web3.providers.HttpProvider(Env.get('ROPSTEN_PROVIDER')))
 
 class GradeController {
-  SetGrade({request, response}){
+  async SetGrade({request, response}){
     let studentId = request.input('studentId')
     let courseId = request.input('courseId')
     let grade = request.input('grade')
 
-    console.log(studentId , courseId, grade);
-
     if(studentId && courseId && grade){
-      return response.status(200).json({
-        message : 'Success'
-      })
+      var GradeChainContract = new web3.eth.Contract(GradeChainJSON.abi, GradeChainJSON.networks["3"].address)
+
+      var addGradeAbi = GradeChainContract.methods.addGrade(studentId, courseId, grade).encodeABI()
+
+      var nonce = await web3.eth.getTransactionCount(Env.get('ROPSTEN_PUBLIC_KEY'))
+
+      var signedTransaction = await web3.eth.accounts.signTransaction({
+          from: Env.get('ROPSTEN_PUBLIC_KEY'),
+          to: GradeChainJSON.networks["3"].address,
+          data: addGradeAbi,
+          gasLimit: 500000,
+          chainId: 3,
+          nonce: nonce
+      }, Env.get('ROPSTEN_PRIVATE_KEY'));
+
+      web3.eth.transactionConfirmationBlocks = 1
+
+      try {
+        var tranHash, tranReceipt
+        await web3.eth.sendSignedTransaction(signedTransaction.rawTransaction)
+        .on('transactionHash', function(hash){
+          console.log(hash);
+          tranHash = hash
+        }).on('confirmation', function(confirmationNumber, receipt){
+          console.log(receipt);
+          tranReceipt = receipt
+        })
+
+        return response.status(200).json(
+          {
+            message : 'Success',
+            student :
+            {
+              tranHash : tranHash,
+              block : tranReceipt.blockNumber.toString(),
+              studentId : studentId,
+              courseId : courseId,
+              grade: grade
+            }
+          }
+        )
+      } catch (e) {
+        return response.status(404).json({ message: 'Alredy exists grade.' })
+      }
     }else{
-      return response.status(400).json({
-        message: 'Bad request, don\'t send id.'
-      })
+      if(studentId){
+        return response.status(400).json({
+          message: 'Bad request, don\'t send student id.'
+        })
+      }else if(courseId){
+        return response.status(400).json({
+          message: 'Bad request, don\'t send course id.'
+        })
+      }else if(grade){
+        return response.status(400).json({
+          message: 'Bad request, don\'t send grade.'
+        })
+      }else{
+        return response.status(400).json({
+          message: 'Bad request, unknown error.'
+        })
+      }
     }
   }
 
