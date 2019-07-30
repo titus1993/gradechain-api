@@ -76,129 +76,71 @@ class GradeController {
     }
   }
 
-  GetGradesById({params, response}){
+  async GetGradesById({params, response}){
     let studentId = params.studentId
+
     if(studentId){
-      if(studentId == "201213587"){
-        return response.status(200).json(
-          {
-            message : 'Success',
-            studentId : studentId,
-            grades :
-            [
-              {
-                txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-                blockNumber : '6601254',
-                date : '08/31/2018',
-                courseId : '281',
-                courseName : 'Sistemas Operativos 2',
-                grade : '80'
-              },
-              {
-                txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-                blockNumber : '6601254',
-                date : '08/31/2018',
-                courseId : '281',
-                courseName : 'Sistemas Operativos 2',
-                grade : '80'
-              },
-              {
-                txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-                blockNumber : '6601254',
-                date : '08/31/2018',
-                courseId : '281',
-                courseName : 'Sistemas Operativos 2',
-                grade : '80'
-              },
-              {
-                txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-                blockNumber : '6601254',
-                date : '08/31/2018',
-                courseId : '281',
-                courseName : 'Sistemas Operativos 2',
-                grade : '80'
-              }
-            ]
-          }
-        )
+      var GradeChainContract = new web3.eth.Contract(GradeChainJSON.abi, GradeChainJSON.networks["3"].address)
+
+      var grades = await GradeChainContract.methods.getStudentGradesById(studentId).call()
+
+      if(grades){
+        var jsonGrades = {}
+        var courseGrades = []
+        jsonGrades.message = 'Success'
+        jsonGrades.grades = courseGrades
+
+        var size = grades.blockNumbers.length
+        for(var i=0; i < size; i++){
+          var grade = {}
+          grade.blockNumber = grades.blockNumbers[i].toString()
+          grade.studentId = studentId.toString()
+          grade.courseId = grades.course[i].toString()
+
+          var course = await GradeChainContract.methods.getCourseById(grades.course[i].toString()).call()
+          grade.courseName = course["2"].toString()
+
+          grade.grade = grades.grade[i].toString()
+          courseGrades.push(grade)
+        }
+
+        return response.status(200).json(jsonGrades)
       }else{
-        return response.status(404).json({ message: 'Don\'t exists course.' })
+        return response.status(404).json({ message: 'Don\'t exists student.' })
       }
     }else{
-      return response.status(400).json({ message: 'Bad request, don\'t send id.' })
+      return response.status(400).json({ message: 'Bad request, don\'t send student id.' })
     }
   }
 
-  GetLastGrades({response}){
-    return response.status(200).json({
-      message : 'Success',
-      grades : [
-        {
-          txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-          blockNumber : '6601254',
-          studentId : '201212859',
-          courseId : '281',
-          grade : '80'
-        },
-        {
-          txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-          blockNumber : '6601254',
-          studentId : '201212859',
-          courseId : '282',
-          grade : '80'
-        },
-        {
-          txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-          blockNumber : '6601254',
-          studentId : '201212859',
-          courseId : '283',
-          grade : '80'
-        },
-        {
-          txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-          blockNumber : '6601254',
-          studentId : '201212859',
-          courseId : '284',
-          grade : '80'
-        },
-        {
-          txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-          blockNumber : '6601254',
-          studentId : '201212859',
-          courseId : '285',
-          grade : '80'
-        },
-        {
-          txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-          blockNumber : '6601254',
-          studentId : '201212859',
-          courseId : '286',
-          grade : '80'
-        },
-        {
-          txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-          blockNumber : '6601254',
-          studentId : '201212859',
-          courseId : '287',
-          grade : '80'
-        },
-        {
-          txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-          blockNumber : '6601254',
-          studentId : '201212859',
-          courseId : '288',
-          grade : '80'
-        },
-        {
-          txHash : '0x9082b45ecaa7dd14ee1501088a926b0514c9fb6c6d22b2e8abfb65488fbddbf3',
-          blockNumber : '6601254',
-          studentId : '201212859',
-          courseId : '289',
-          grade : '80'
-        }
-      ]
+  async GetLastGrades({response}){
+    var jsonEvents = {}
+    jsonEvents.message = 'Success'
+    var events = []
+    jsonEvents.events = events
+
+    try {
+      var GradeChainContract = new web3.eth.Contract(GradeChainJSON.abi, GradeChainJSON.networks["3"].address)
+      var contractEvents = await GradeChainContract.getPastEvents('AddGrade', {fromBlock: 0, toBlock: 'latest'})
+
+      var size = contractEvents.length
+      for(var i = size - 1; i >= 0; i--){
+        var event = {}
+        event.txHash = contractEvents[i].transactionHash.toString()
+        event.blockNumber = contractEvents[i].returnValues["0"].toString()
+        event.studentId = contractEvents[i].returnValues["1"].toString()
+        event.courseId = contractEvents[i].returnValues["2"].toString()
+        event.grade = contractEvents[i].returnValues["3"].toString()
+
+        events.push(event)
+      }
+
+      return response.status(200).json(jsonEvents)
+    } catch (e) {
+      jsonEvents.message = e.toString()
+      return response.status(200).json(jsonEvents)
     }
-  )}
+  }
 }
 
 module.exports = GradeController

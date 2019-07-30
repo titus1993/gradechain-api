@@ -16418,12 +16418,12 @@
         }
       },
       "links": {},
-      "address": "0x947eA4E20Fa4D020f522e66326f8420F4131816a",
-      "transactionHash": "0xbc0befb099cab055c764d2057d32bac19e2da59fc5bd766d8b6e58c4b65ed92b"
+      "address": "0x20a685a5CDADE5cAf81f9FDfeaeb0D3038a0e555",
+      "transactionHash": "0x712ffe7a744493b0891fe4cb3555c79685636acfd52704abf5d7ea959262ba8d"
     }
   },
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-04-04T21:33:45.524Z",
+  "updatedAt": "2019-07-30T04:52:36.619Z",
   "devdoc": {
     "methods": {
       "isOwner()": {
