@@ -33,13 +33,13 @@ class StudentController {
             }
           )
         }else{
-          return response.status(404).json({ message: 'Don\'t exists student.' })
+          return response.status(404).json('Don\'t exists student.')
         }
       }else{
-        return response.status(404).json({ message: 'Don\'t exists student.' })
+        return response.status(404).json('Don\'t exists student.')
       }
     }else{
-      return response.status(400).json({ message: 'Bad request, don\'t send id.' })
+      return response.status(400).json('Bad request, don\'t send id.')
     }
   }
 

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <!-- Mobile Specific Meta -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="{{ assetsUrl('img/ico.ico') }}">
+    
+    <!-- Author Meta -->
+    <meta name="author" content="colorlib">
+    <!-- Meta Description -->
+    <meta name="description" content="">
+    <!-- Meta Keyword -->
+    <meta name="keywords" content="">
+    <!-- meta character set -->
+    <meta charset="UTF-8">
+    <!-- Site Title -->
+    <title>
+        @section('title')
+        GradeChain
+        @endsection
+    </title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <!-- CSS ============================================= -->
+    <link rel="stylesheet" href="{{ assetsUrl('css/linearicons.css') }}">
+    <link rel="stylesheet" href="{{ assetsUrl('css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ assetsUrl('css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ assetsUrl('css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ assetsUrl('css/nice-select.css') }}">
+    <link rel="stylesheet" href="{{ assetsUrl('css/animate.min.css') }}">
+    <link rel="stylesheet" href="{{ assetsUrl('css/owl.carousel.css') }}">
+    <link rel="stylesheet" href="{{ assetsUrl('css/main.css') }}">
+
+    <style>
+            body {font-family: Arial, Helvetica, sans-serif;}
+            
+            /* The Modal (background) */
+            .modal {
+              display: none; /* Hidden by default */
+              position: fixed; /* Stay in place */
+              z-index: 1; /* Sit on top */
+              padding-top: 100px; /* Location of the box */
+              left: 0;
+              top: 0;
+              width: 100%; /* Full width */
+              height: 100%; /* Full height */
+              overflow: auto; /* Enable scroll if needed */
+              background-color: rgb(0,0,0); /* Fallback color */
+              background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+            
+            /* Modal Content */
+            .modal-content {
+              position: relative;
+              background-color: #fefefe;
+              margin: auto;
+              padding: 0;
+              border: 1px solid #888;
+              width: 80%;
+              box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+              -webkit-animation-name: animatetop;
+              -webkit-animation-duration: 0.4s;
+              animation-name: animatetop;
+              animation-duration: 0.4s
+            }
+            
+            /* Add Animation */
+            @-webkit-keyframes animatetop {
+              from {top:-300px; opacity:0} 
+              to {top:0; opacity:1}
+            }
+            
+            @keyframes animatetop {
+              from {top:-300px; opacity:0}
+              to {top:0; opacity:1}
+            }
+            
+            /* The Close Button */
+            .close {
+              color: white;
+              float: right;
+              font-size: 28px;
+              font-weight: bold;
+            }
+            
+            .close:hover,
+            .close:focus {
+              color: #000;
+              text-decoration: none;
+              cursor: pointer;
+            }
+            
+            .modal-header {
+              padding: 2px 16px;
+              background-color: #5cb85c;
+              color: white;
+            }
+            
+            .modal-body {padding: 2px 16px;}
+            
+            .modal-footer {
+              padding: 2px 16px;
+              background-color: #5cb85c;
+              color: white;
+            }
+            </style>
+
+    @!section('head')
+</head>
+
+<body>
+    <!--################ Start Header Area ########-->
+    <header id="header">
+        <div class="container main-menu">
+            <div class="row align-items-center justify-content-between d-flex">
+                <div id="logo">
+                    <a href="/"><img src="{{ assetsUrl('/img/logo.png') }}" alt="" title="" /></a>
+                </div>
+                @if(isLogin)
+                <nav id="nav-menu-container">
+                    <div>
+                        <ul class="nav-menu">
+                            <li>
+                                <a href="/Logout">
+                                    <i class="fa fa-sign-out fa-2x"></i>
+                                    &nbsp;
+                                    Logout
+                                </a>
+                            </li>
+                            <li>
+                                <div class="flexsearch">
+                                    <form class="flexsearch--form" action="/Student" method="get">
+                                        <div class="flexsearch--input-wrapper">
+                                            <input name="studentId" class="flexsearch--input" type="search"
+                                                placeholder="Search Student by Id ">
+                                        </div>
+                                        <input class="flexsearch--submit" type="submit" value="&#10140;" />
+                                    </form>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div align="right">
+                        <a href="/Register-Student">Student</a>&nbsp;&nbsp;&nbsp;
+                        <a href="/Register-Course">Course</a>&nbsp;&nbsp;&nbsp;
+                        <a href="/Register-Grade">Grade</a>&nbsp;&nbsp;&nbsp;
+                    </div>
+                </nav>
+                <!--######## #nav-menu-container -->
+                @else
+                <nav id="nav-menu-container">
+                    <ul class="nav-menu">
+                        <li>
+                            <a href="/Login">
+                                <i class="fa fa-user fa-2x"></i>
+                                &nbsp;
+                                Login
+                            </a>
+                        </li>
+                        <li>
+                            <div class="flexsearch">
+                                <form class="flexsearch--form" action="/Student" method="get">
+                                    <div class="flexsearch--input-wrapper">
+                                        <input name="studentId" class="flexsearch--input" type="search"
+                                            placeholder="Search Student by Id ">
+                                    </div>
+                                    <input class="flexsearch--submit" type="submit" value="&#10140;" />
+                                </form>
+                            </div>
+                    </ul>
+                </nav>
+                @endif
+                <!--######## #nav-menu-container -->
+            </div>
+        </div>
+        <hr>
+    </header>
+    <!--######## End Header Area ########-->
+
+    <!--######## start banner Area ########-->
+    <section class="banner-area relative" id="home">
+
+    </section>
+    <!--######## End banner Area ########-->
+
+    <!--######## Start contact-page Area ########-->
+
+    @!section('content')
+
+    <!--######## End contact-page Area ########-->
+
+    <!--######## start footer Area ########-->
+    <footer class="footer-area section-gap">
+        <div class="container ">
+            <p class="col-lg-8 col-sm- footer-text m-0
+							 ">
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                Copyright &copy;
+                <script>document.write(new Date().getFullYear());</script> All rights reserved | This page was made with
+                <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="" target="_blank">Marvin Pivaral & Anicka
+                    Cercado</a>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+        </div>
+    </footer>
+    <!--######## End footer Area ########-->
+
+
+    <script src="{{ assetsUrl('js/vendor/jquery.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="{{ assetsUrl('js/vendor/bootstrap.min.js') }}"></script>
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
+    <script src="{{ assetsUrl('js/easing.min.js') }}"></script>
+    <script src="{{ assetsUrl('js/hoverIntent.js') }}"></script>
+    <script src="{{ assetsUrl('js/superfish.min.js') }}"></script>
+    <script src="{{ assetsUrl('js/jquery.ajaxchimp.min.js') }}"></script>
+    <script src="{{ assetsUrl('js/jquery.magnific-popup.min.js') }}"></script>
+    <script src="{{ assetsUrl('js/owl.carousel.min.js') }}"></script>
+    <script src="{{ assetsUrl('js/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ assetsUrl('js/owl.carousel.min.js') }}"></script>
+    <script src="{{ assetsUrl('js/jquery.nice-select.min.js') }}"></script>
+    <script src="{{ assetsUrl('js/jquery.lightbox.js') }}"></script>
+    <script src="{{ assetsUrl('js/mail-script.js') }}"></script>
+    <script src="{{ assetsUrl('js/main.js') }}"></script>
+    @!section('script')
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+@layout('master')
+
+@section('content')
+<section class="whole-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-4 mt-sm-30 element-wrap">
+                <div class="single-sidebar-widget user-info-widget">
+                    <img src="{{ assetsUrl('img/perfil.png') }}" alt="">
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <form action="#">
+                    <div class="mt-10">
+                        <input type="text" name="first_name" placeholder="First Name" onfocus="this.placeholder = ''"
+                            onblur="this.placeholder = 'First Name'" value='{{student.firstName}}' required
+                            class="single-input" disabled>
+                    </div>
+                    <div class="mt-10">
+                        <input type="text" name="last_name" placeholder="Last Name" onfocus="this.placeholder = ''"
+                            onblur="this.placeholder = 'Last Name'" value='{{student.lastName}}' required
+                            class="single-input" disabled>
+                    </div>
+                    <div class="mt-10">
+                        <input type="text" name="career" placeholder="Career" onfocus="this.placeholder = ''"
+                            onblur="this.placeholder = 'Career'" value='{{student.career}}' required
+                            class="single-input" disabled>
+                    </div>
+                    <div class="mt-10">
+                        <input type="text" name="birthdate" placeholder="Birthdate" onfocus="this.placeholder = ''"
+                            onblur="this.placeholder = 'Birthdate'" value='{{student.birthDate}}' required
+                            class="single-input" disabled>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="whole-wrap">
+    <div class="container">
+        <div class="box-body table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Block</th>
+                        <th>Course Id</th>
+                        <th>Course Name</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @each(grade in student.grades)
+                    <tr>
+                        <td>{{grade.blockNumber}}</td>
+                        <td>{{grade.courseId}}</td>
+                        <td>{{grade.courseName}}</td>
+                        <td>{{grade.grade}}</td>
+                    </tr>
+                    @else
+                    <div class="table-row">
+                        <div class="serial"></div>
+                        <div class="percentage">No records</div>
+                    </div>
+                    @endeach
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</section>
+@endsection

@@ -104,6 +104,8 @@ class GradeController {
           courseGrades.push(grade)
         }
 
+        console.log(jsonGrades)
+
         return response.status(200).json(jsonGrades)
       }else{
         return response.status(404).json({ message: 'Don\'t exists student.' })
