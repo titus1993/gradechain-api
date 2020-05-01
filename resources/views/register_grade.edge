@@ -1,24 +1,31 @@
 @layout('master')
 
 @section('content')
-<section class="whole-wrap">
-    <div class="container">
-        <div class="row">
-        <div class="col-md-9">
-            <input type="text" name="studentId" id="studentId" placeholder="Student Id" onfocus="this.placeholder = ''"
-                onblur="this.placeholder = 'Student Id'" required class="single-input">
-        </div>
-        <div class="col-md-3">
-            <a href="javascript:;" onclick="return searchStudent()"
-                class="genric-btn primary circle">Search</a>
-        </div>
-    </div>
-</section>
 
-<section class="whole-wrap">
-    <div class="container">
-        <div class="comment-form-2">
-            <form>
+<form id="form1" method="POST" action="/Register-Grade">
+    {{ csrfField() }}
+    <section class="whole-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <input type="text" name="studentId" id="studentId" placeholder="Student Id"
+                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Student Id'" required
+                        class="single-input" 
+                        @if(data.courseId) 
+                            value="{{ data.studentId }}" 
+                        @endif
+                    >
+                </div>
+                <div class="col-md-3">
+                    <a href="javascript:;" onclick="return searchStudent()" class="genric-btn primary circle">Search</a>
+                </div>
+            </div>            
+    </section>
+
+    <section class="whole-wrap">
+        <div class="container">
+            <div class="comment-form-2">
+
                 <div class="form-group">
                     <input type="text" class="form-control" id="first_name" placeholder="First Name"
                         onfocus="this.placeholder = ''" onblur="this.placeholder = 'First Name'" disabled>
@@ -35,182 +42,200 @@
                     <input type="text" class="form-control" id="birthdate" placeholder="Birthdate"
                         onfocus="this.placeholder = ''" onblur="this.placeholder = 'Birthdate'" disabled>
                 </div>
-            </form>
-        </div>
-    </div>
-</section>
 
-<section class="whole-wrap">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-9">
-                <input type="text" name="courseId" id="courseId" placeholder="Course Id" onfocus="this.placeholder = ''"
-                    onblur="this.placeholder = 'Course Id'" required class="single-input">
-            </div>
-            <div class="col-md-3">
-                <a href="#" class="genric-btn primary circle">Search</a>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-
-<section class="whole-wrap">
-    <div class="container">
-        <div class="comment-form-2">
-            <form>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="course_name" placeholder="Course Name"
-                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Course Name'" disabled>
+    <section class="whole-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <input type="text" name="courseId" id="courseId" placeholder="Course Id"
+                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Course Id'" required
+                        class="single-input" 
+                        @if(data.courseId) 
+                            value="{{ data.courseId }}" 
+                        @endif
+                    >
                 </div>
-            </form>
-        </div>
-    </div>
-</section>
-
-<section class="whole-wrap">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-9">
-                <input type="text" name="grade" placeholder="Grade" onfocus="this.placeholder = ''"
-                    onblur="this.placeholder = 'Grade'" required class="single-input">
-            </div>
-            <div class="col-md-3">
-                <a href="#" class="genric-btn success circle">Success</a>
+                <div class="col-md-3">
+                    <a href="javascript:;" onclick="return searchCourse()"
+                        class="genric-btn primary circle">Search</a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-    @if(err)
-        <!-- The Modal -->
-        <div id="myModal" class="modal">
 
-                <!-- Modal content -->
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: red;">
-                        <h4 class="modal-title">Error</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    
-                </div>
-
-                <div class="modal-body">
-                    <p>{{ err }}</p>
-                </div>
-
-                <div class="modal-footer" style="background-color: red;">
-                </div>
-            </div>      
+    <section class="whole-wrap">
+        <div class="container">
+            <div class="comment-form-2">
+                
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="course_name" placeholder="Course Name"
+                            onfocus="this.placeholder = ''" onblur="this.placeholder = 'Course Name'" disabled>
+                    </div>
+            </div>
         </div>
-        <script>
-            // Get the modal
-            var modal = document.getElementById("myModal");
+    </section>
 
-            // Get the button that opens the modal
-            var btn = document.getElementById("myBtn");
+    <section class="whole-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <input type="text" id="grade" name="grade" placeholder="Grade" onfocus="this.placeholder = ''"
+                        onblur="this.placeholder = 'Grade'" required class="single-input">
+                </div>
+                <div class="col-md-3">
+                    <a href="javascript:;" onclick="document.getElementById('form1').submit();"
+                        class="genric-btn success circle">Sucess</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
 
-            // Get the <span> element that closes the modal
-            var span = document.getElementsByClassName("close")[0];
+@if(err)
+<!-- The Modal -->
+<div id="myModal" class="modal">
 
-            // When the user clicks the button, open the modal 
-            
-            modal.style.display = "block";
-            
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header" style="background-color: red;">
+            <h4 class="modal-title">Error</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-            // When the user clicks on <span> (x), close the modal
-            span.onclick = function() {
+        </div>
+
+        <div class="modal-body">
+            <p>{{ err }}</p>
+        </div>
+
+        <div class="modal-footer" style="background-color: red;">
+        </div>
+    </div>
+</div>
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+
+    modal.style.display = "block";
+
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
             modal.style.display = "none";
-            }
+        }
+    }
+</script>
+@endif
 
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                 modal.style.display = "none";
-                }
-            }
-        </script>
-    @endif
+@if(success)
+<!-- The Modal -->
+<div id="myModal" class="modal">
 
-    @if(success)
-        <!-- The Modal -->
-        <div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Success</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                <!-- Modal content -->
-            <div class="modal-content">
-                <div class="modal-header">
-                        <h4 class="modal-title">Success</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    
-                </div>
-
-                <div class="modal-body">
-                    <p>{{ success }}</p>
-                    <p><a href="https://ropsten.etherscan.io/tx/{{ data.tranHash }}" target="_blank">Transaction {{ data.tranHash }}</a></p>
-                    <p>Block Number: {{ data.block }}</p>
-                </div>
-
-                <div class="modal-footer">
-                </div>
-            </div>      
         </div>
-        <script>
-            // Get the modal
-            var modal = document.getElementById("myModal");
 
-            // Get the button that opens the modal
-            var btn = document.getElementById("myBtn");
+        <div class="modal-body">
+            <p>{{ success }}</p>
+            <p><a href="https://ropsten.etherscan.io/tx/{{ data.tranHash }}" target="_blank">Transaction
+                    {{ data.tranHash }}</a></p>
+            <p>Block Number: {{ data.block }}</p>
+        </div>
 
-            // Get the <span> element that closes the modal
-            var span = document.getElementsByClassName("close")[0];
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
 
-            // When the user clicks the button, open the modal 
-            
-            modal.style.display = "block";
-            
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
 
-            // When the user clicks on <span> (x), close the modal
-            span.onclick = function() {
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+
+    modal.style.display = "block";
+
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
             modal.style.display = "none";
-            }
-
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                 modal.style.display = "none";
-                }
-            }
-        </script>
-    @endif
-
-
-    <script>
-        function searchStudent() {    
-            var studentId = document.getElementById("studentId").value;    
-            console.log(studentId);    
-            $.ajax({
-                type: "get", url: "/api/Student/" + studentId,
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function (request, status, error) {
-                    alert(request.responseText);
-                    console.log(request.responseText);
-                }
-            });
         }
+    }
+</script>
+@endif
 
-        function searchCourse() {    
-            var courseId = document.getElementById("studentId").value;         
-            $.ajax({
-                type: "get", url: "/api/Course/2" + courseId,
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function (request, status, error) {
-                    alert(request.responseText);
-                    console.log(error);
-                }
-            });
-        }
-    </script>
+
+<script>
+    function searchStudent() {
+        var studentId = document.getElementById("studentId").value;
+        console.log(studentId);
+        $.ajax({
+            type: "get", url: "/api/Student/" + studentId,
+            success: function (data) {
+                console.log(data);
+                document.getElementById("first_name").value = data.student.firstName;
+                document.getElementById("last_name").value = data.student.lastName;
+                document.getElementById("career").value = data.student.career;
+                document.getElementById("birthdate").value = data.student.birthDate;
+            },
+            error: function (request, status, error) {
+                alert(request.responseText);
+                console.log(request.responseText);
+                document.getElementById("first_name").value = "";
+                document.getElementById("last_name").value = "";
+                document.getElementById("career").value = "";
+                document.getElementById("birthdate").value = "";
+            }
+        });
+    }
+
+    function searchCourse() {
+        var courseId = document.getElementById("courseId").value;
+        $.ajax({
+            type: "get", url: "/api/Course/" + courseId,
+            success: function (data) {
+                console.log(data);
+                document.getElementById("course_name").value = data.course.name;
+            },
+            error: function (request, status, error) {
+                alert(request.responseText);
+                console.log(error);
+                document.getElementById("course_name").value = "";
+            }
+        });
+    }
+</script>
 @endsection

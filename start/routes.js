@@ -53,6 +53,7 @@ Route.group('autenticate', function () {
   Route.post('Register-Course', 'SiteController.SetCourse')
 
   Route.on('/Register-Grade').render('register_grade', { isLogin : true })
+  Route.post('Register-Grade', 'SiteController.SetGrade')
 
   Route.on('/Register-Student').render('register_student', { isLogin : true })
   Route.post('Register-Student', 'SiteController.SetStudent')

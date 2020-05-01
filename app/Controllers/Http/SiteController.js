@@ -225,6 +225,64 @@ class SiteController {
             return await view.render('register_course', { data: data, err: err, isLogin: true })
         }
     }
+
+    async SetGrade({ view, request }) {
+        var data = {}
+        
+        let studentId = request.input('studentId')
+        let courseId = request.input('courseId')
+        let grade = request.input('grade')
+
+        data.studentId = studentId
+        data.courseId = courseId
+        data.grade = grade
+
+        if(studentId && courseId && grade){
+            var GradeChainContract = new web3.eth.Contract(GradeChainJSON.abi, GradeChainJSON.networks["3"].address)
+
+            var addGradeAbi = GradeChainContract.methods.addGrade(studentId, courseId, grade).encodeABI()
+
+            var nonce = await web3.eth.getTransactionCount(Env.get('ROPSTEN_PUBLIC_KEY'))
+
+            var signedTransaction = await web3.eth.accounts.signTransaction({
+                from: Env.get('ROPSTEN_PUBLIC_KEY'),
+                to: GradeChainJSON.networks["3"].address,
+                data: addGradeAbi,
+                gasLimit: 500000,
+                chainId: 3,
+                nonce: nonce
+            }, Env.get('ROPSTEN_PRIVATE_KEY'));
+
+            web3.eth.transactionConfirmationBlocks = 1
+
+            try {
+                var tranHash, tranReceipt
+                await web3.eth.sendSignedTransaction(signedTransaction.rawTransaction)
+                    .on('transactionHash', function (hash) {
+                        console.log(hash);
+                        tranHash = hash
+                    }).on('confirmation', function (confirmationNumber, receipt) {
+                        console.log(receipt);
+                        tranReceipt = receipt
+                    })
+
+                var success = 'Grade registered.'
+
+                data.tranHash = tranHash 
+                data.block = tranReceipt.blockNumber.toString()
+
+                return await view.render('register_grade', { data: data, success: success, isLogin: true })
+
+            } catch (e) {
+                var err = 'Alredy exists grade.'
+                return await view.render('register_grade', { data: data, err: err, isLogin: true })
+            }
+        } else {
+            var err = 'Complete all fields'
+            console.log(data)
+            return await view.render('register_grade', { data: data, err: err, isLogin: true })
+        }
+    }
 }
 
 module.exports = SiteController
