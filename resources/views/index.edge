@@ -1,41 +1,80 @@
-@layout('master')
-
+@layout('master2')
+@section('head')
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../../bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+@endsection
+@section('contentHeader')
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+          Ultimas notas registradas
+        </h1>
+    </section>
+@endsection
 @section('content')
-<section class="whole-wrap">
-    <div class="container">
-        <h3 class="mb-30">Last recorded grades</h3>
-        
-        <div class="box-body table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Tx Hash</th>
-                        <th>Block</th>
-                        <th>Student Id</th>
-                        <th>Course Id</th>
-                        <th>Grade</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @each(record in records)
-                    <tr>
-                        <td><a href="https://ropsten.etherscan.io/tx/{{record.txHash}}" target="_blank">{{record.txHash}}</a></td>
-                        <td><a href="https://ropsten.etherscan.io/block/{{record.blockNumber}}" target="_blank">{{record.blockNumber}}</a></td>
-                        <td><a href="/Student?studentId={{record.studentId}}" target="_blank">{{record.studentId}}</a></td>
-                        <td>{{record.courseId}}</td>
-                        <td>{{record.grade}}</td>
-                    </tr>
-                    @else
-                    <div class="table-row">
-                        <div class="serial"></div>
-                        <div class="percentage">No records</div>
-                    </div>
-                    @endeach
-                </tbody>
-                <tfoot>
-                </tfoot>
-            </table>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body table-responsive">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Codigo de Transaccion</th>
+                                <th>Numero de Bloque</th>
+                                <th>Carnet de Estudiante</th>
+                                <th>Codigo de Curso</th>
+                                <th>Nota</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @each(record in records)
+                                <tr>
+                                    <td><a href="https://ropsten.etherscan.io/tx/{{record.txHash}}" target="_blank">{{record.txHash}}</a></td>
+                                    <td><a href="https://ropsten.etherscan.io/block/{{record.blockNumber}}" target="_blank">{{record.blockNumber}}</a></td>
+                                    <td><a href="/Student?studentId={{record.studentId}}" target="_blank">{{record.studentId}}</a></td>
+                                    <td>{{record.courseId}}</td>
+                                    <td>{{record.grade}}</td>
+                                </tr>
+                            @else
+                                <td colspan="5"><center>No hay registros</center></td>
+                            @endeach                        
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Codigo de Transaccion</th>
+                                <th>Numero de Bloque</th>
+                                <th>Carnet de Estudiante</th>
+                                <th>Codigo de Curso</th>
+                                <th>Nota</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        <!-- /.box -->
         </div>
+        <!-- /.col -->
     </div>
-</section>
+@endsection
+
+@section('script')
+    <!-- DataTables -->
+    <script src="../../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script>
+        $(function () {
+          $('#example1').DataTable({
+            'paging'      : true,
+            'lengthChange': true,
+            'searching'   : true,
+            'ordering'    : false,
+            'info'        : true,
+            'autoWidth'   : true,
+            "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+            }
+          })
+        })
+    </script>
 @endsection

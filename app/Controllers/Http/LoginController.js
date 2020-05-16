@@ -20,7 +20,7 @@ class LoginController {
         } catch (err) {
             console.log(err)
         }
-        return view.render('login', { err: "Invalid user name or password" })
+        return view.render('login', { err: "Usuario y/o Contraseña invalidos" })
     }
 
     async Logout({ response, auth }) {
