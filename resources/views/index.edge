@@ -1,20 +1,39 @@
 @layout('master2')
 @section('head')
     <!-- DataTables -->
-    <link rel="stylesheet" href="../../bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="{{ assetsUrl('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
 @endsection
 @section('contentHeader')
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-          Ultimas notas registradas
+          Bienvenido a GradeChain
         </h1>
     </section>
 @endsection
 @section('content')
     <div class="row">
+        <div class="col-sm-12 ">
+            <div class="box">
+                <div class="box-body">
+                <p style="font-size:20px">
+                    <img src="{{ assetsUrl('/img/logo.png') }}" align="left" width="20%" height="20%"/>
+                    GradeChain es una plataforma en la cual es posible obtener el record de notas de los 
+                    estudiantes de la facultad de ingeniería de la Universidad de San Carlos de Guatemala. 
+                    Su concepto es único ya que todos la información es almacenada es en bloques de Ethereum 
+                    la cual garantiza la integridad de la información.
+                </p>
+                </div>
+            
+            </div>
+            
+          </div>
+        
         <div class="col-xs-12">
             <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Ultimas notas registradas</h3>
+                </div>
                 <div class="box-body table-responsive">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -52,9 +71,8 @@
                 </div>
                 <!-- /.box-body -->
             </div>
-        <!-- /.box -->
+            <!-- /.box -->
         </div>
-        <!-- /.col -->
     </div>
 @endsection
 

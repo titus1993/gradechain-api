@@ -1,204 +1,174 @@
-@layout('master')
+@layout('master2')
+
+@section('head')
+<style>
+    .example-modal .modal {
+        position: relative;
+        top: auto;
+        bottom: auto;
+        right: auto;
+        left: auto;
+        display: block;
+        z-index: 1;
+    }
+
+    .example-modal .modal {
+        background: transparent !important;
+    }
+</style>
+@endsection
 
 @section('content')
-
-<form id="form1" method="POST" action="/Register-Grade">
-    {{ csrfField() }}
-    <section class="whole-wrap">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-9">
-                    <input type="text" name="studentId" id="studentId" placeholder="Student Id"
-                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Student Id'" required
-                        class="single-input" 
-                        @if(data.courseId) 
-                            value="{{ data.studentId }}" 
-                        @endif
-                    >
+<div class="row">
+    <!-- form start -->
+    <form role="form" id="form1" method="POST" action="/Register-Grade">
+        {{ csrfField() }}
+        <div class="col-xs-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Datos del Estudiante</h3>
                 </div>
-                <div class="col-md-3">
-                    <a href="javascript:;" onclick="return searchStudent()" class="genric-btn primary circle">Search</a>
-                </div>
-            </div>            
-    </section>
-
-    <section class="whole-wrap">
-        <div class="container">
-            <div class="comment-form-2">
-
-                <div class="form-group">
-                    <input type="text" class="form-control" id="first_name" placeholder="First Name"
-                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'First Name'" disabled>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="last_name" placeholder="Last Name"
-                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Last Name'" disabled>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="career" placeholder="Career"
-                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Career'" disabled>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="birthdate" placeholder="Birthdate"
-                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Birthdate'" disabled>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section class="whole-wrap">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-9">
-                    <input type="text" name="courseId" id="courseId" placeholder="Course Id"
-                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Course Id'" required
-                        class="single-input" 
-                        @if(data.courseId) 
-                            value="{{ data.courseId }}" 
-                        @endif
-                    >
-                </div>
-                <div class="col-md-3">
-                    <a href="javascript:;" onclick="return searchCourse()"
-                        class="genric-btn primary circle">Search</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <section class="whole-wrap">
-        <div class="container">
-            <div class="comment-form-2">
-                
+                <!-- /.box-header -->
+                <div class="box-body">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="course_name" placeholder="Course Name"
-                            onfocus="this.placeholder = ''" onblur="this.placeholder = 'Course Name'" disabled>
-                    </div>
-            </div>
-        </div>
-    </section>
+                        <label for="courseId">Carnet de Estudiante</label>
+                        <div class="input-group input-group-sm">
 
-    <section class="whole-wrap">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-9">
-                    <input type="text" id="grade" name="grade" placeholder="Grade" onfocus="this.placeholder = ''"
-                        onblur="this.placeholder = 'Grade'" required class="single-input">
+                            <input type="text" class="form-control" name="studentId" id="studentId" required>
+                            <span class="input-group-btn">
+                                <button onclick="return searchStudent()" type="button"
+                                    class="btn btn-info btn-flat">Buscar</button>
+                            </span>
+                        </div>
+                        <!-- /input-group -->
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">Nombres del estudiante</label>
+                        <input id="firstName" name="firstName" type="text" class="form-control"
+                            placeholder="Nombres del estudiante" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Apellidos del estudiante</label>
+                        <input id="lastName" name="lastName" type="text" class="form-control"
+                            placeholder="Apellidos del estudiante" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="career">Carrera</label>
+                        <input id="career" name="career" type="text" class="form-control" placeholder="Carrera"
+                            disabled>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <a href="javascript:;" onclick="document.getElementById('form1').submit();"
-                        class="genric-btn success circle">Sucess</a>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+
                 </div>
             </div>
+            <!-- /.box -->
         </div>
-    </section>
-</form>
+
+        <!-- /.col -->
+        <div class="col-xs-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Curso y Nota</h3>
+                </div>
+                <!-- /.box-header -->
+
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="courseId">Codigo de Curso</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" name="courseId" id="courseId" required>
+                            <span class="input-group-btn">
+                                <button onclick="return searchCourse()" type="button"
+                                    class="btn btn-info btn-flat">Buscar</button>
+                            </span>
+                        </div>
+                        <!-- /input-group -->
+                    </div>
+                    <div class="form-group">
+                        <label for="courseName">Nombre de curso</label>
+                        <input id="courseName" name="courseName" type="text" class="form-control" placeholder="Carrera"
+                            disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="career">Nota</label>
+                        <input id="grade" name="grade" type="number" class="form-control" placeholder="Nota" required>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary pull-right">Registrar</button>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </form>
+</div>
+
+
+
+
 
 @if(err)
-<!-- The Modal -->
-<div id="myModal" class="modal">
-
-    <!-- Modal content -->
-    <div class="modal-content">
-        <div class="modal-header" style="background-color: red;">
-            <h4 class="modal-title">Error</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-
+<div class="modal modal-danger fade" id="modal-danger">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Error</h4>
+            </div>
+            <div class="modal-body">
+                <p>{{ err }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" data-dismiss="modal">Cerrar</button>
+            </div>
         </div>
-
-        <div class="modal-body">
-            <p>{{ err }}</p>
-        </div>
-
-        <div class="modal-footer" style="background-color: red;">
-        </div>
+        <!-- /.modal-content -->
     </div>
+    <!-- /.modal-dialog -->
 </div>
-<script>
-    // Get the modal
-    var modal = document.getElementById("myModal");
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("myBtn");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks the button, open the modal 
-
-    modal.style.display = "block";
-
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-</script>
+<!-- /.modal -->
 @endif
 
 @if(success)
-<!-- The Modal -->
-<div id="myModal" class="modal">
-
-    <!-- Modal content -->
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title">Success</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{ success }}</h4>
+            </div>
+            <div class="modal-body">
+                <p>Codigo de Transaccion: <a href="https://ropsten.etherscan.io/tx/{{ data.tranHash }}"
+                        target="_blank">{{ data.tranHash }}</a></p>
+                <p>Numbero de Bloque: {{ data.block }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+            </div>
         </div>
-
-        <div class="modal-body">
-            <p>{{ success }}</p>
-            <p><a href="https://ropsten.etherscan.io/tx/{{ data.tranHash }}" target="_blank">Transaction
-                    {{ data.tranHash }}</a></p>
-            <p>Block Number: {{ data.block }}</p>
-        </div>
-
-        <div class="modal-footer">
-        </div>
+        <!-- /.modal-content -->
     </div>
+    <!-- /.modal-dialog -->
 </div>
-<script>
-    // Get the modal
-    var modal = document.getElementById("myModal");
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("myBtn");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks the button, open the modal 
-
-    modal.style.display = "block";
-
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-</script>
+<!-- /.modal -->
 @endif
 
+@endsection
 
+@section('script')
 <script>
+    $('#modal-default').modal('show');
+    $('#modal-danger').modal('show');
     function searchStudent() {
         var studentId = document.getElementById("studentId").value;
         console.log(studentId);
@@ -206,18 +176,16 @@
             type: "get", url: "/api/Student/" + studentId,
             success: function (data) {
                 console.log(data);
-                document.getElementById("first_name").value = data.student.firstName;
-                document.getElementById("last_name").value = data.student.lastName;
+                document.getElementById("firstName").value = data.student.firstName;
+                document.getElementById("lastName").value = data.student.lastName;
                 document.getElementById("career").value = data.student.career;
-                document.getElementById("birthdate").value = data.student.birthDate;
             },
             error: function (request, status, error) {
                 alert(request.responseText);
                 console.log(request.responseText);
-                document.getElementById("first_name").value = "";
-                document.getElementById("last_name").value = "";
+                document.getElementById("firstName").value = "";
+                document.getElementById("lastName").value = "";
                 document.getElementById("career").value = "";
-                document.getElementById("birthdate").value = "";
             }
         });
     }
@@ -228,12 +196,12 @@
             type: "get", url: "/api/Course/" + courseId,
             success: function (data) {
                 console.log(data);
-                document.getElementById("course_name").value = data.course.name;
+                document.getElementById("courseName").value = data.course.name;
             },
             error: function (request, status, error) {
                 alert(request.responseText);
                 console.log(error);
-                document.getElementById("course_name").value = "";
+                document.getElementById("courseName").value = "";
             }
         });
     }

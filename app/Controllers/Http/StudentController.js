@@ -97,7 +97,7 @@ class StudentController {
           }
         )
       } catch (e) {
-        return response.status(404).json({ message: 'Alredy exists student.' })
+        return response.status(404).json({ message: 'Ya existe el estudiante.' })
       }
     }else{
       if(id){

@@ -32,6 +32,7 @@ Route.get('/', 'SiteController.Index')
 Route.on('/').render('index')
 
 Route.get('/Student', 'SiteController.StudentReport')
+Route.get('/Cierre/:id', 'SiteController.CierreReport')
 
 Route.post('/Login', 'LoginController.Login')
 Route.get('/Login', async function ({ auth, view, response, request }) {

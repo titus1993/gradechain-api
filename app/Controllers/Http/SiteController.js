@@ -67,6 +67,7 @@ class SiteController {
                     studentInfo.lastName = student["3"]
                     studentInfo.career = student["4"]
                     studentInfo.birthDate = student["5"]
+                    studentInfo.cierre = false
                     studentInfo.image = null
 
                     GradeChainContract = new web3.eth.Contract(GradeChainJSON.abi, GradeChainJSON.networks["3"].address)
@@ -87,10 +88,85 @@ class SiteController {
 
                             grade.grade = grades.grade[i].toString()
                             courseGrades.push(grade)
+
+                            if(grade.courseName == "CIERRE DE PENSUM"){
+                                studentInfo.cierre = true
+                            }
                         }
                     }
 
                     return await view.render('student_report', { student: studentInfo, isLogin: isLoged })
+                } else {
+                    //return response.status(404).json({ message: 'Don\'t exists student.' })
+                }
+
+            } else {
+                //return response.status(404).json({ message: 'Don\'t exists student.' })
+            }
+
+
+        } else {
+            return response.status(400).json({ message: 'Bad request, don\'t send id.' })
+        }
+    }
+
+    async CierreReport({ view, response, auth, params }) {
+        let studentId = params.id
+
+        var isLoged = false;
+
+        try {
+            await auth.check()
+            isLoged = true;
+        } catch (e) {
+            //console.log(e);
+        }
+
+        if (studentId) {
+            var GradeChainContract = new web3.eth.Contract(GradeChainJSON.abi, GradeChainJSON.networks["3"].address);
+
+            var student = await GradeChainContract.methods.getStudentById(studentId).call();
+
+            if (student) {
+                var studentInfo = {}
+                var courseGrades = []
+                studentInfo.grades = courseGrades
+                if (parseInt(student["0"], 16) > 0) {
+                    studentInfo.blockNumber = student["0"].toString()
+                    studentInfo.studentId = student["1"].toString()
+                    studentInfo.firstName = student["2"]
+                    studentInfo.lastName = student["3"]
+                    studentInfo.career = student["4"]
+                    studentInfo.birthDate = student["5"]
+                    studentInfo.cierre = false
+                    studentInfo.image = null
+
+                    GradeChainContract = new web3.eth.Contract(GradeChainJSON.abi, GradeChainJSON.networks["3"].address)
+
+                    var grades = await GradeChainContract.methods.getStudentGradesById(studentId).call()
+
+                    if (grades) {
+
+                        var size = grades.blockNumbers.length
+                        for (var i = 0; i < size; i++) {
+                            var grade = {}
+                            grade.blockNumber = grades.blockNumbers[i].toString()
+                            grade.studentId = studentId.toString()
+                            grade.courseId = grades.course[i].toString()
+
+                            var course = await GradeChainContract.methods.getCourseById(grades.course[i].toString()).call()
+                            grade.courseName = course["2"].toString()
+
+                            grade.grade = grades.grade[i].toString()
+                            courseGrades.push(grade)
+
+                            if(grade.courseName == "CIERRE DE PENSUM"){
+                                studentInfo.cierre = true
+                            }
+                        }
+                    }
+
+                    return await view.render('student_cierre', { student: studentInfo, isLogin: isLoged })
                 } else {
                     //return response.status(404).json({ message: 'Don\'t exists student.' })
                 }
@@ -155,7 +231,7 @@ class SiteController {
                 data.block = tranReceipt.blockNumber.toString()
                 data.tranHash = tranHash
 
-                var success = 'Student registered.'
+                var success = 'Estudiante registrado.'
 
                 return await view.render('register_student', { data: data, success: success, isLogin: true })
 
@@ -208,7 +284,7 @@ class SiteController {
                         tranReceipt = receipt
                     })
 
-                var success = 'Course registered.'
+                var success = 'Curso registrado.'
 
                 data.tranHash = tranHash 
                 data.block = tranReceipt.blockNumber.toString()
@@ -266,7 +342,7 @@ class SiteController {
                         tranReceipt = receipt
                     })
 
-                var success = 'Grade registered.'
+                var success = 'Nota registrada.'
 
                 data.tranHash = tranHash 
                 data.block = tranReceipt.blockNumber.toString()

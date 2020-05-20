@@ -1,72 +1,145 @@
-@layout('master')
+@layout('master2')
+
+@section('head')
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ assetsUrl('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
+@endsection
 
 @section('content')
-<section class="whole-wrap">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-4 mt-sm-30 element-wrap">
-                <div class="single-sidebar-widget user-info-widget">
-                    <img src="{{ assetsUrl('img/perfil.png') }}" alt="">
-                </div>
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <form action="#">
-                    <div class="mt-10">
-                        <input type="text" name="first_name" placeholder="First Name" onfocus="this.placeholder = ''"
-                            onblur="this.placeholder = 'First Name'" value='{{student.firstName}}' required
-                            class="single-input" disabled>
-                    </div>
-                    <div class="mt-10">
-                        <input type="text" name="last_name" placeholder="Last Name" onfocus="this.placeholder = ''"
-                            onblur="this.placeholder = 'Last Name'" value='{{student.lastName}}' required
-                            class="single-input" disabled>
-                    </div>
-                    <div class="mt-10">
-                        <input type="text" name="career" placeholder="Career" onfocus="this.placeholder = ''"
-                            onblur="this.placeholder = 'Career'" value='{{student.career}}' required
-                            class="single-input" disabled>
-                    </div>
-                    <div class="mt-10">
-                        <input type="text" name="birthdate" placeholder="Birthdate" onfocus="this.placeholder = ''"
-                            onblur="this.placeholder = 'Birthdate'" value='{{student.birthDate}}' required
-                            class="single-input" disabled>
-                    </div>
-                </form>
-            </div>
-        </div>
+<!-- Main content -->
+<section class="invoice">
+  <!-- title row -->
+  <div class="row">
+    <div class="col-xs-12">
+      <h2 class="page-header">
+        <i class="fa fa-globe"></i> Cursos Aprobados
+        <small class="pull-right">Fecha: 19/05/2020</small>
+      </h2>
     </div>
-</section>
-<section class="whole-wrap">
-    <div class="container">
+    <!-- /.col -->
+  </div>
+  <!-- info row -->
+  <div class="row invoice-info">
+    <div class="col-sm-3 invoice-col">
+      <center>
+        <img src="{{ assetsUrl('/img/perfil.png') }}" class="img-responsive pad" alt="Foto">
+      </center>
+    </div>
+    <!-- /.col -->
+    <div class="col-sm-6 invoice-col">
+      <div class="form-group">
+        <label for="studentId">Carnet del Estudiante</label>
+        <input id="studentId" name="studentId" type="text" class="form-control" placeholder="Carnet del Estudiante"
+          value="{{ student.studentId }}" disabled>
+      </div>
+      <div class="form-group">
+        <label for="firstName">Nombres del estudiante</label>
+        <input id="firstName" name="firstName" type="text" class="form-control" placeholder="Nombres del estudiante"
+          value="{{ student.firstName }}" disabled>
+      </div>
+      <div class="form-group">
+        <label for="lastName">Apellidos del estudiante</label>
+        <input id="lastName" name="lastName" type="text" class="form-control" placeholder="Apellidos del estudiante"
+          value="{{ student.lastName }}" disabled>
+      </div>
+      <div class="form-group">
+        <label for="career">Carrera</label>
+        <input id="career" name="career" type="text" class="form-control" placeholder="Carrera"
+          value="{{ student.career }}" disabled>
+      </div>
+      <div class="form-group">
+        <label for="birthDate">Nacimiento del estudiante</label>
+        <input id="birthDate" name="birthDate" type="text" class="form-control" value="{{ student.birthDate }}"
+          disabled>
+      </div>
+
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+  <!-- this row will not appear when printing -->  
+  <div class="row no-print">
+    <div class="col-xs-12">
+      @if(student.cierre)
+      <a href="/Cierre/{{ student.studentId }}" target="_blank" class="btn btn btn-success"><i class="fa fa-download"></i> Constancia de Cierre</a>
+      @endif
+      <button type="button" class="btn btn-default pull-right" style="margin-right: 5px;" onclick="window.print()">
+        <i class="fa fa-print"></i> Imprimir
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="">
         <div class="box-body table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Block</th>
-                        <th>Course Id</th>
-                        <th>Course Name</th>
-                        <th>Grade</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @each(grade in student.grades)
-                    <tr>
-                        <td>{{grade.blockNumber}}</td>
-                        <td>{{grade.courseId}}</td>
-                        <td>{{grade.courseName}}</td>
-                        <td>{{grade.grade}}</td>
-                    </tr>
-                    @else
-                    <div class="table-row">
-                        <div class="serial"></div>
-                        <div class="percentage">No records</div>
-                    </div>
-                    @endeach
-                </tbody>
-                <tfoot>
-                </tfoot>
-            </table>
+          <table id="example1" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Bloque de Transaccion</th>
+                <th>Codigo de Curso</th>
+                <th>Nombre de Curso</th>                
+                <th>Nota</th>
+              </tr>
+            </thead>
+            <tbody>
+              @each(grade in student.grades)
+              <tr>
+                <td>{{grade.blockNumber}}</td>
+                <td>{{grade.courseId}}</td>
+                <td>{{grade.courseName}}</td>
+                <td>{{grade.grade}}</td>
+              </tr>
+              @else
+              <td colspan="4">
+                <center>No hay registros</center>
+              </td>
+              @endeach
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Bloque de Transaccion</th>
+                <th>Codigo de Curso</th>
+                <th>Nombre de Curso</th>                
+                <th>Nota</th>
+              </tr>
+            </tfoot>
+          </table>
         </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
     </div>
+    <!-- /.col -->
+  </div>
 </section>
+<!-- /.content -->
+@endsection
+
+@section('script')
+    <!-- InputMask -->
+    <script src="{{ assetsUrl('plugins/input-mask/jquery.inputmask.js') }}"></script>
+    <script src="{{ assetsUrl('plugins/input-mask/jquery.inputmask.date.extensions.js') }}"></script>
+    <script src="{{ assetsUrl('plugins/input-mask/jquery.inputmask.extensions.js') }}"></script>
+    <script>        
+        //Datemask dd/mm/yyyy
+        //$('#birthDate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+    </script>
+    <!-- DataTables -->
+    <script src="{{ assetsUrl('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ assetsUrl('bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script>
+        $(function () {
+          $('#example1').DataTable({
+            'paging'      : true,
+            'lengthChange': true,
+            'searching'   : true,
+            'ordering'    : false,
+            'info'        : true,
+            'autoWidth'   : true,
+            "language": {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+            }
+          })
+        })
+    </script>
 @endsection
